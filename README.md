@@ -1,106 +1,70 @@
-# 🧬 Zellbild-Segmentierung mit Otsu-Verfahren
 
-Dieses Projekt vergleicht verschiedene Methoden zur automatischen Segmentierung von Zellkernen in fluoreszenzmikroskopischen Aufnahmen. Der Fokus liegt auf der Implementierung und dem Vergleich von globalen und lokalen Otsu-Schwellenwertverfahren.
+# Zellkernsegmentierung mit Otsu-Verfahren
 
----
-
-## 🎯 Ziel
-
-Ziel des Projekts ist es, die Segmentierungsqualität eigener Otsu-Implementierungen (global und lokal) gegenüber etablierten Methoden (`skimage`) zu bewerten. Als Referenz dienen handsegmentierte Ground-Truth-Masken.
+Dieses Projekt implementiert verschiedene Otsu-basierte Segmentierungsmethoden und vergleicht deren Leistung anhand des Dice Scores mit Ground-Truth-Daten. Dazu gehören sowohl eigene Implementierungen als auch Referenzverfahren aus `scikit-image`.
 
 ---
 
-## ⚙️ Methoden
+## Voraussetzungen
 
-Folgende Methoden wurden implementiert und verglichen:
+### Installation der Abhängigkeiten
 
-| Methode                        | Quelle       | Beschreibung                            |
-|-------------------------------|--------------|-----------------------------------------|
-| Otsu Global (custom)          | Eigene       | Globales Otsu-Verfahren via Histogramm  |
-| Otsu Global (skimage)         | `skimage`    | Referenz-Implementierung                |
-| Otsu Local (custom)           | Eigene       | Lokaler Schwellenwert pro Pixel         |
-| Otsu Local (skimage)          | `skimage`    | Lokales Mittelwert-Verfahren            |
-| Multi-Otsu (skimage)          | `skimage`    | Schwellenwerte für 3 Klassen            |
-
-Die Segmentierungen werden mit dem **Dice Score** gegen die Ground-Truth bewertet.
-
----
-
-## 📊 Ergebnisse
-
-Die Bewertung erfolgt quantitativ (Dice Score) und visuell:
-
-- **Boxplots** zur Verteilung der Scores pro Methode
-- **Heatmap** der Scores pro Bild × Methode
-- **Scatterplots**: eigene vs. `skimage`-Methode
-- **Visualisierungen** der Segmentierungen mit Original- und GT-Bild
-
-Beispielhafte Ergebnisse finden sich im Ordner `output_visuals/`.
-
----
-
-## 📁 Projektstruktur
-
-```
-.
-├── data/                      # Eingabebilder & Ground-Truth
-├── results/                   # Dice Scores (CSV)
-├── output_visuals/           # Segmentierungs-Bilder
-├── src/
-│   ├── otsu_global.py        # Eigene globale Otsu-Methode
-│   ├── otsu_local.py         # Eigene lokale Otsu-Methode
-│   ├── gray_hist.py          # Histogramm-Funktionen
-│   ├── load_image_pair.py    # Bild & GT laden
-├── process_image.py          # Wendet alle Methoden auf ein Bild an
-├── run_batch_evaluation.py   # Wendet alle Methoden auf alle Bilder an
-├── visualize_segmentation.py # Speichert Beispielbilder
-├── Otsu_Segmentierung_Auswertung.ipynb  # Ergebnisnotebook
-└── README.md
-```
-
----
-
-## ▶️ Ausführung
-
-1. Python 3.8+ installieren  
-2. Abhängigkeiten installieren (z. B. via `requirements.txt`)
+Installiere die benötigten Pakete mit:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Segmentierung ausführen:
+Falls du lieber ein Python-Skript nutzt:
 
 ```bash
-python run_all_batch_evaluation.py
+python install_requirements.py
 ```
 
-4. Visualisierung:
+### `requirements.txt` enthält:
 
-```bash
-python visualize_segmentation.py
-```
+- `numpy` – numerische Operationen
+- `pandas` – Datenverarbeitung (z. B. für Dice Scores)
+- `matplotlib` – Visualisierung von Bildern & Scores
+- `seaborn` – erweiterte Plot-Darstellung (Boxplots, Heatmaps)
+- `scikit-image` – Bildverarbeitung und Segmentierung
+- `tqdm` – Fortschrittsbalken für Batch-Auswertungen
 
-5. Ergebnisse im Notebook auswerten:
+---
 
-```bash
-jupyter notebook Otsu_Segmentierung_Auswertung.ipynb
+## Projektstruktur
+
+```plaintext
+.
+├── data/                    # Mikroskopiebilder & Ground Truth
+├── src/                    # Segmentierungsmodule (Otsu, Histogramm, Dice Score)
+├── output_visuals/         # Visualisierte Segmentierungsergebnisse
+├── results/                # CSV & PNG-Auswertungen (z. B. Dice Scores)
+├── requirements.txt        # Alle benötigten Python-Pakete
+├── install_requirements.py # Alternativer Installer (Python)
+├── run_batch_evaluation.py # Führt Segmentierung & Bewertung auf ganzen Datensätzen durch
+├── process_image.py        # Enthält alle Methoden zur Segmentierung
+├── evaluate_segmentation.py# Berechnet Dice Scores
+├── visualize_segmentations.py # Darstellung der Segmentierungsergebnisse
+└── README.md               # Projektbeschreibung
 ```
 
 ---
 
-## 🧪 Beispielausgabe
+## Erste Schritte
 
-<img src="output_visuals/N2DH-GOWT1/Otsu Global (custom)/t01.png" width="500" />
-
----
-
-## 👤 Autor
-
-Victor De Souza Enning – Molekulare Biotechnologie, Universität Heidelberg
+1. **Daten in `data/` ablegen**
+2. **`run_batch_evaluation.py` ausführen**, um Segmentierungen und Dice Scores zu erzeugen.
+3. **Ergebnisse mit `plot_all_methods.py` visualisieren**.
 
 ---
 
-## 📜 Lizenz
+## Ziel
 
-MIT License – frei verwendbar mit Nennung
+Vergleich und Bewertung unterschiedlicher Segmentierungsmethoden zur Zellkernextraktion aus Mikroskopieaufnahmen.
+
+---
+
+## Kontakt & Weiterentwicklung
+
+Feedback, Erweiterungen oder Anfragen gerne als Pull Request oder direkt per Nachricht.
