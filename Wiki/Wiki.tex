@@ -1,0 +1,819 @@
+
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{fancyvrb}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{titlesec}
+\geometry{margin=2.5cm}
+\definecolor{lightgray}{gray}{0.95}
+\titleformat{\section}[block]{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}[block]{\normalsize\bfseries}{\thesubsection}{1em}{}
+\lstset{
+  backgroundcolor=\color{lightgray},
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}
+}
+
+\title{Otsu-Segmentierungsprojekt: Technische Dokumentation}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+\section{Einleitung}
+Dieses Dokument beschreibt ein Projekt zur Zellkernsegmentierung in Mikroskopiebildern unter Verwendung verschiedener Otsu-Verfahren. Es dokumentiert Quellcode, Methodik und Ergebnisse zur Bewertung.
+
+\newpage
+
+
+\newpage
+
+\section{Zielsetzung}
+Ziel des Projekts ist es, Zellkerne aus Fluoreszenz-Mikroskopieaufnahmen automatisch zu segmentieren. Es werden Otsu-basierte Schwellenwertmethoden getestet und gegen Ground-Truth-Masken evaluiert.
+
+
+ewpage
+
+\section{Modulübersicht}
+(Der gesamte Abschnitt wird aufgeteilt in Unterabschnitte, z. B. 	exttt{dice\_score.py}, 	exttt{gray\_hist.py} usw.)
+
+\section{Modul: \texttt{dice\_score.py} - Berechnung des Dice-Koeffizienten}
+
+\subsection*{Zweck}
+Dieses Skript berechnet den \textbf{Dice-Koeffizienten}, eine gängige Metrik zur Bewertung der Überlappung zwischen zwei binären Segmentierungen (z.\,B.\ Vorhersage vs.\ Ground Truth). Der Dice Score liegt zwischen 0 (keine Überlappung) und 1 (perfekte Übereinstimmung).
+
+\subsection*{Importe}
+\begin{verbatim}
+import numpy as np
+from skimage.io import imread
+\end{verbatim}
+
+\begin{itemize}
+  \item \texttt{numpy} wird für numerische Operationen auf Arrays verwendet.
+  \item \texttt{skimage.io.imread} lädt Bilddateien als NumPy-Arrays.
+\end{itemize}
+
+\subsection*{Funktion \texttt{dice\_score(pred, target)}}
+\begin{verbatim}
+def dice_score(pred: np.ndarray, target: np.ndarray) -> float:
+\end{verbatim}
+
+\paragraph{Argumente:}
+\begin{itemize}
+  \item \texttt{pred}: vorhergesagte binäre Maske (z.\,B.\ von einem Segmentierungsalgorithmus), Typ: \texttt{np.ndarray}, dtype: \texttt{bool}
+  \item \texttt{target}: Ground-Truth-Maske (manuell annotiert), ebenfalls ein binäres \texttt{np.ndarray}
+\end{itemize}
+
+\paragraph{Ablauf:}
+\begin{enumerate}
+  \item \textbf{Formprüfung}
+\begin{verbatim}
+if pred.shape != target.shape:
+    raise ValueError("Die Eingabebilder haben unterschiedliche Formen.")
+\end{verbatim}
+
+  \item \textbf{Berechnung der Überlappung (Intersection)}
+\begin{verbatim}
+intersection = np.logical_and(pred, target).sum()
+\end{verbatim}
+
+  \item \textbf{Berechnung der Gesamtanzahl positiver Pixel}
+\begin{verbatim}
+total = pred.sum() + target.sum()
+\end{verbatim}
+
+  \item \textbf{Sonderfallbehandlung}
+\begin{verbatim}
+if total == 0:
+    return 1.0
+\end{verbatim}
+
+  \item \textbf{Berechnung des Dice Scores}
+\begin{verbatim}
+return 2 * intersection / total
+\end{verbatim}
+\[
+\text{Dice} = \frac{2 \cdot |A \cap B|}{|A| + |B|}
+\]
+\end{enumerate}
+
+\subsection*{Testlauf im \texttt{\_\_main\_\_}-Block}
+\begin{verbatim}
+if __name__ == "__main__":
+    pred = imread("data-git/N2DH-GOWT1/img/t01.tif", as_gray=True) > 0
+    gt   = imread("data-git/N2DH-GOWT1/gt/man_seg01.tif", as_gray=True) > 0
+    print(f"Dice Score: {dice_score(pred, gt):.4f}")
+\end{verbatim}
+
+\paragraph{Erklärung:}
+\begin{itemize}
+  \item \texttt{imread(..., as\_gray=True)} lädt das Bild als Graustufenbild.
+  \item \texttt{> 0} binarisiert das Bild (alle Pixel $> 0$ werden zu \texttt{True}, alle anderen zu \texttt{False}).
+  \item Danach wird \texttt{dice\_score(pred, gt)} berechnet und mit 4 Dezimalstellen ausgegeben.
+\end{itemize}
+
+\paragraph{Beispielausgabe:}
+\begin{verbatim}
+Dice Score: 0.8234
+\end{verbatim}
+Dies bedeutet: Es besteht eine Überlappung von etwa 82{,}34\,\% zwischen vorhergesagter und tatsächlicher Segmentierung.
+
+\subsection*{Zusammenfassung}
+\begin{itemize}
+  \item Diese Funktion ist \textbf{zentral für die quantitative Bewertung} von Segmentierungsergebnissen.
+  \item Sie ist robust gegenüber leeren Masken.
+  \item Sie kann leicht in größere Pipelines eingebunden werden, um \textbf{viele Segmentierungsmethoden vergleichbar zu machen}.
+\end{itemize}
+
+\section{Modul: \texttt{gray\_hist.py} – Grauwert-Histogrammberechnung}
+
+Dieses Modul dient der Berechnung und optionalen Visualisierung von Histogrammen für Graustufenbilder. Es wird unter anderem für die Otsu-Segmentierung verwendet, um die Intensitätsverteilung eines Bildes auszuwerten.
+
+\subsection*{Funktionen}
+
+\subsubsection*{\texttt{compute\_gray\_histogram(image\_source, bins=256, value\_range=(0, 255))}}
+
+\paragraph{Zweck}
+Diese Funktion berechnet das Histogramm eines Grauwertbildes.
+
+\paragraph{Eingaben:}
+\begin{itemize}
+  \item \texttt{image\_source} (\texttt{Path}, \texttt{str} oder \texttt{np.ndarray}): Das Bild kann entweder als Pfad oder direkt als NumPy-Array übergeben werden.
+  \item \texttt{bins} (\texttt{int}): Anzahl der Bins im Histogramm. Standard: 256 (für 8-Bit-Bilder sinnvoll).
+  \item \texttt{value\_range} (\texttt{Tuple[int, int]}): Wertebereich der Intensitäten. Standardmäßig von 0 bis 255.
+\end{itemize}
+
+\paragraph{Ausgabe:}
+\begin{itemize}
+  \item \texttt{hist}: Array mit den Häufigkeiten der Grauwerte.
+  \item \texttt{bin\_edges}: Array mit den Bin-Grenzen.
+\end{itemize}
+
+\paragraph{Funktionsweise:}
+\begin{enumerate}
+  \item Das Bild wird geladen (falls ein Pfad übergeben wurde).
+  \item Es wird in ein Grauwertbild konvertiert.
+  \item Das Array wird mit \texttt{.ravel()} flach gemacht.
+  \item Das Histogramm wird mit \texttt{np.histogram()} berechnet.
+\end{enumerate}
+
+\subsubsection*{\texttt{plot\_gray\_histogram(hist, bin\_edges)}}
+
+\paragraph{Zweck}
+Visualisiert ein Histogramm mit \texttt{matplotlib}.
+
+\paragraph{Eingaben:}
+\begin{itemize}
+  \item \texttt{hist}: Die berechneten Häufigkeiten (z.\,B.\ aus \texttt{compute\_gray\_histogram}).
+  \item \texttt{bin\_edges}: Die zugehörigen Intensitätsgrenzen.
+\end{itemize}
+
+\paragraph{Funktionsweise:}
+\begin{itemize}
+  \item Erstellt ein Balkendiagramm mit \texttt{plt.bar}.
+  \item Setzt Achsenbeschriftungen: „Grauwert“ und „Häufigkeit“.
+  \item Zeigt das Diagramm mit \texttt{plt.show()} an.
+\end{itemize}
+
+\subsection*{Beispielanwendung}
+
+\begin{verbatim}
+from gray_hist import compute_gray_histogram, plot_gray_histogram
+hist, bin_edges = compute_gray_histogram("path/to/image.png")
+plot_gray_histogram(hist, bin_edges)
+\end{verbatim}
+
+\subsection*{Hinweise}
+\begin{itemize}
+  \item Diese Funktionen sind wichtig für Schwellenwertverfahren wie das Otsu-Verfahren.
+  \item Sie erlauben eine Analyse der Bildhelligkeit und helfen bei der automatischen Segmentierung.
+\end{itemize}
+
+\section{Modul: \texttt{load\_image\_pair.py}}
+
+Dieses Skript enthält eine zentrale Hilfsfunktion zum Laden von Bild-Ground-Truth-Paaren aus einem gegebenen Dateipfad. Es wird verwendet, um sowohl das Eingabebild (z.\,B.\ ein Graustufen-Mikroskopiebild) als auch die zugehörige Ground-Truth-Segmentierungsmaske korrekt zu laden und als \texttt{NumPy}-Arrays zurückzugeben.
+
+\subsection*{Ziel}
+
+Die Funktion stellt sicher, dass:
+\begin{itemize}
+  \item Bilder korrekt als Grauwertbilder gelesen werden,
+  \item die Ground-Truth-Maske korrekt binarisiert wird (also in ein boolesches Format überführt wird),
+  \item die Rückgabe für weitere Segmentierungs- und Evaluierungsschritte geeignet ist.
+\end{itemize}
+
+\subsection*{Code-Übersicht}
+
+\begin{verbatim}
+import numpy as np
+from skimage.io import imread
+from typing import Tuple, Union
+from pathlib import Path
+\end{verbatim}
+
+\subsubsection*{Funktion: \texttt{load\_image\_and\_gt(...)}}
+
+\begin{verbatim}
+def load_image_and_gt(
+    image_path: Union[str, Path],
+    gt_path: Union[str, Path],
+    threshold: float = 0.0
+) -> Tuple[np.ndarray, np.ndarray]:
+\end{verbatim}
+
+\paragraph{Parameter:}
+\begin{itemize}
+  \item \texttt{image\_path}: Pfad zum Bild (String oder Pathlib-Objekt)
+  \item \texttt{gt\_path}: Pfad zur Ground-Truth-Maske
+  \item \texttt{threshold}: Schwellenwert, um die GT-Maske in eine binäre Maske umzuwandeln (Standard: 0.0)
+\end{itemize}
+
+\paragraph{Rückgabe:}
+Ein Tupel bestehend aus:
+\begin{itemize}
+  \item \texttt{image}: Graustufenbild als 2D \texttt{np.ndarray} mit Werten im Bereich [0,1]
+  \item \texttt{gt\_mask}: Binäre Ground-Truth-Maske (\texttt{dtype=bool})
+\end{itemize}
+
+\subsection*{Funktionsweise im Detail}
+
+\begin{verbatim}
+image = imread(str(image_path), as_gray=True)
+\end{verbatim}
+
+Das Bild wird mithilfe von \texttt{skimage.io.imread} als Graustufenbild geladen (automatisch normalisiert auf Bereich [0,1]).
+
+\begin{verbatim}
+gt_mask = imread(str(gt_path), as_gray=True) > threshold
+\end{verbatim}
+
+Die Ground-Truth-Maske wird ebenfalls als Grauwertbild geladen. Durch den Vergleich \texttt{> threshold} wird das Bild in eine binäre Maske umgewandelt, z.\,B.\ alles was größer als 0 ist, wird als „True“ interpretiert.
+
+\subsection*{Beispiel}
+
+\begin{verbatim}
+image, gt = load_image_and_gt("data/N2DH-GOWT1/img/t01.tif", "data/N2DH-GOWT1/gt/man_seg01.tif")
+\end{verbatim}
+
+Lädt das Bild \texttt{t01.tif} und die zugehörige Ground-Truth-Maske \texttt{man\_seg01.tif} aus dem Dataset \texttt{N2DH-GOWT1}.
+
+\subsection*{Hinweise}
+
+\begin{itemize}
+  \item Der Schwellenwert kann angepasst werden, falls GT-Bilder in Grauwerten vorliegen.
+  \item Diese Funktion stellt sicher, dass sowohl Bild als auch Maske kompatibel weiterverarbeitet werden können.
+\end{itemize}
+
+\section{Modul: \texttt{otsu\_global.py}}
+
+Dieses Modul enthält die eigene Implementierung des globalen Otsu-Verfahrens zur Schwellenwertbestimmung und Segmentierung von Grauwertbildern.
+
+\section{Modul: \texttt{otsu\_global.py}}
+
+\subsection*{Funktionen}
+
+\subsubsection*{\texttt{otsu\_threshold(p: np.ndarray) -> int}}
+
+Berechnet den optimalen Schwellenwert $t$ anhand einer Wahrscheinlichkeitsverteilung $p$ (normalisiertes Histogramm).
+
+\paragraph{Ablauf:}
+\begin{enumerate}
+  \item $P = \texttt{np.cumsum(p)}$ \quad (kumulative Summe der Wahrscheinlichkeiten)
+  \item $\texttt{bins} = \texttt{np.arange(len(p))}$ \quad (Grauwertachsen)
+  \item $\mu = \texttt{np.cumsum(bins * p)}$ \quad (kumulative Mittelwerte)
+  \item $\mu_T = \mu[-1]$ \quad (Gesamtmittelwert)
+  \item $\sigma_b^2 = \frac{(\mu_T \cdot P - \mu)^2}{P \cdot (1 - P) + 10^{-12}}$ \quad (Zwischenklassenvarianz)
+  \item $\texttt{argmax}(\sigma_b^2)$ \quad liefert den optimalen Schwellenwert
+\end{enumerate}
+
+\subsubsection*{\texttt{binarize(arr: np.ndarray, t: int) -> np.ndarray}}
+
+Binarisiert ein Grauwertbild: Alle Pixel größer als $t$ werden als 1 (Objekt) gesetzt.
+
+\textbf{Rückgabe:} Binärbild (0 = Hintergrund, 1 = Objekt)
+
+\subsubsection*{\texttt{apply\_global\_otsu(image: np.ndarray) -> np.ndarray}}
+
+Vollständige Pipeline:
+\begin{enumerate}
+  \item Berechnung des Histogramms mit \texttt{compute\_gray\_histogram(...)}
+  \item Normalisierung zu Wahrscheinlichkeiten
+  \item Bestimmung des Schwellenwertes mit \texttt{otsu\_threshold(...)}
+  \item Binarisierung mit \texttt{binarize(...)}
+\end{enumerate}
+
+\subsection*{Beispielverwendung}
+
+\begin{verbatim}
+from otsu_global import apply_global_otsu
+from skimage.io import imread
+image = imread("path/to/image.tif", as_gray=True)
+binary = apply_global_otsu(image)
+\end{verbatim}
+
+\subsection*{Abhängigkeiten}
+\begin{itemize}
+  \item \texttt{gray\_hist.py} (Histogrammberechnung)
+  \item \texttt{numpy}
+\end{itemize}
+
+\section{Modul: \texttt{otsu\_local.py}}
+
+Dieses Modul implementiert eine lokale Version des Otsu-Schwellenwertverfahrens. Statt eines globalen Schwellenwertes wird für jedes Pixel ein individueller Schwellenwert anhand seines lokalen Umfelds berechnet.
+
+\subsection*{Funktion: \texttt{local\_otsu(image, radius=3)}}
+
+\paragraph{Parameter:}
+\begin{itemize}
+  \item \texttt{image} (\texttt{np.ndarray}): Eingabebild im Wertebereich $[0, 1]$
+  \item \texttt{radius} (\texttt{int}): Umgebungsradius (Standard: 3), resultiert in einem Block der Größe $(2r + 1)^2$
+\end{itemize}
+
+\paragraph{Rückgabewerte:}
+\begin{itemize}
+  \item \texttt{t\_map} (\texttt{np.ndarray}): Karte lokaler Schwellenwerte
+  \item \texttt{mask} (\texttt{np.ndarray}): Binäre Maske (\texttt{True} = Objekt)
+\end{itemize}
+
+\subsection*{Funktionsweise}
+
+\begin{enumerate}
+  \item Vorverarbeitung des Bildes zu 8-Bit mit \texttt{skimage.img\_as\_ubyte}
+  \item Padding des Bildes mit \texttt{np.pad}, um Randverarbeitung zu ermöglichen
+  \item Für jedes Pixel:
+  \begin{itemize}
+    \item Extraktion des lokalen Blocks
+    \item Berechnung des Grauwert-Histogramms
+    \item Anwendung des Otsu-Verfahrens (mit \texttt{otsu\_global.otsu\_threshold})
+    \item Vergleich des Pixelwerts mit lokalem Schwellenwert
+  \end{itemize}
+  \item Rückgabe von Schwellenwertkarte und Segmentierungsmaske
+\end{enumerate}
+
+\subsection*{Abhängigkeiten}
+\begin{itemize}
+  \item \texttt{numpy}
+  \item \texttt{skimage.img\_as\_ubyte}
+  \item \texttt{src.gray\_hist.compute\_gray\_histogram}
+  \item \texttt{src.otsu\_global.otsu\_threshold}
+\end{itemize}
+
+\textbf{Vorteil:} Diese Methode ist besonders robust bei inhomogener Ausleuchtung oder variierenden Kontrasten, da sie kontextabhängig segmentiert.
+
+
+\section*{ Modulbeschreibung: \texttt{process\_image.py}, \texttt{process\_image\_ein.py}, \texttt{process\_image\_all.py}}
+
+Dieses Modul-Set bündelt alle Schritte zur Anwendung und Auswertung verschiedener Bildsegmentierungsmethoden auf einzelne oder mehrere Mikroskopie-Bilder. Im Fokus stehen Otsu-basierte Verfahren sowie Referenzimplementierungen aus \texttt{skimage}.
+
+\subsection*{ \texttt{process\_image.py}}
+
+\subsubsection*{Funktion \texttt{process\_all\_methods(image)}}
+
+Diese Funktion nimmt ein einzelnes Grauwertbild entgegen und wendet folgende Segmentierungsmethoden darauf an:
+
+\begin{itemize}
+  \item \textbf{Otsu Global (custom)}: Eigene Implementierung basierend auf Histogramm-Analyse.
+  \item \textbf{Otsu Local (custom)}: Berechnet für jedes Pixel einen lokalen Schwellenwert basierend auf Histogrammen im Umkreis.
+  \item \textbf{Otsu Global (skimage)}: Standard-Implementierung aus \texttt{skimage.filters.threshold\_otsu}.
+  \item \textbf{Otsu Local (skimage)}: Lokale Schwellenwertmethode (\texttt{threshold\_local}) mit anpassbarem Fenster.
+  \item \textbf{Multi-Otsu (skimage)}: Erweiterung für mehr als zwei Klassen – nützlich zur Trennung von Zellkern, Zytoplasma und Hintergrund.
+\end{itemize}
+
+\textbf{Rückgabewert:} Ein Dictionary \texttt{\{Methodenname: Binärmaske (np.ndarray)\}}
+
+\paragraph{Helferfunktionen:}
+\begin{itemize}
+  \item \texttt{apply\_skimage\_global(...)} – verwendet globalen Otsu aus \texttt{skimage}
+  \item \texttt{apply\_skimage\_local(...)} – verwendet lokalen Schwellenwert aus \texttt{skimage}
+  \item \texttt{apply\_skimage\_multiotsu(...)} – verwendet \texttt{threshold\_multiotsu} für mehrklassige Segmentierung
+\end{itemize}
+
+\subsection*{ \texttt{process\_image\_ein.py}}
+
+\paragraph{Ziel:}
+\begin{itemize}
+  \item Testweise Anwendung der Methoden auf genau ein Bild.
+  \item Nutzt \texttt{load\_image\_and\_gt(...)} um Bild und Ground Truth zu laden.
+  \item Führt \texttt{process\_all\_methods(image)} aus.
+  \item Gibt \textbf{Form} und \textbf{Anzahl positiver Pixel} jeder Methode in der Konsole aus.
+\end{itemize}
+
+\paragraph{Beispielausgabe:}
+\begin{verbatim}
+Otsu Global (custom): (512, 512), Positiv: 12034
+Otsu Local (custom):  (512, 512), Positiv: 13400
+...
+\end{verbatim}
+
+\subsection*{ \texttt{process\_image\_all.py}}
+
+\paragraph{Ziel:}
+\begin{itemize}
+  \item Läuft automatisiert über alle Datensätze im Verzeichnis \texttt{data/}
+  \item Erkennt automatisch, ob ein Bild zur \textbf{NIH3T3}-Serie gehört (andere Benennung)
+  \item Lädt jedes Bild mit zugehöriger Ground Truth
+  \item Führt \texttt{process\_all\_methods(image)} aus
+  \item Gibt pro Bild und Methode die Dimension und Anzahl der Segmentierungspixel in der Konsole aus
+\end{itemize}
+
+\paragraph{Hinweise zur Funktion:}
+\begin{itemize}
+  \item Unterstützt \texttt{.tif} und \texttt{.png}
+  \item Erkennt fehlende Ground-Truth-Dateien automatisch und überspringt diese
+  \item Gut geeignet für erste visuelle Kontrolle der Pipeline auf kompletten Datensätzen
+\end{itemize}
+
+\subsection*{ Zusammenfassung}
+
+Diese drei Dateien bilden gemeinsam das Rückgrat der Bildverarbeitungspipeline:
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Datei} & \textbf{Aufgabe} \\
+\hline
+\texttt{process\_image.py} & Definiert alle Segmentierungsmethoden \\
+\texttt{process\_image\_ein.py} & Einzelbild-Analyse (Debugging, Test) \\
+\texttt{process\_image\_all.py} & Batch-Anwendung auf komplette Datensätze \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\section*{ \texttt{evaluate\_segmentation.py} – Auswertung der Segmentierung mittels Dice Score}
+
+Dieses Modul bewertet die Qualität verschiedener Segmentierungsmethoden, indem es den sogenannten \textbf{Dice Score} verwendet. Der Dice-Koeffizient ist ein gängiges Maß zur Überlappung binärer Masken in der Bildverarbeitung.
+
+\subsection*{ Funktionsweise}
+
+\subsubsection*{Funktion: \texttt{evaluate\_segmentations(gt\_mask, predictions)}}
+
+Diese Funktion berechnet den Dice Score für jede Segmentierungsmethode im Vergleich zur Ground-Truth-Maske.
+
+\paragraph{Argumente:}
+\begin{itemize}
+  \item \texttt{gt\_mask} (\texttt{np.ndarray}): Die Ground-Truth-Maske (boolesches Array)
+  \item \texttt{predictions} (\texttt{Dict[str, np.ndarray]}): Ein Dictionary mit Namen der Methoden und den binären Segmentierungsmasken
+\end{itemize}
+
+\paragraph{Rückgabe:}
+\begin{itemize}
+  \item \texttt{pd.DataFrame}: Eine sortierte Tabelle mit den Dice Scores aller Methoden
+\end{itemize}
+
+\paragraph{Rechenprinzip:} Für jede Methode wird die Vorhersagemaske in ein boolesches Format umgewandelt. Dann wird mithilfe der Funktion \texttt{dice\_score} die Übereinstimmung zur Ground Truth berechnet.
+
+\subsection*{ Beispiel: Anwendung auf ein einzelnes Bild}
+
+\begin{verbatim}
+from src.load_image_pair import load_image_and_gt
+from process_image import process_all_methods
+from evaluate_segmentation import evaluate_segmentations
+
+image, gt_mask = load_image_and_gt("data/N2DH-GOWT1/img/t01.tif",
+                                   "data/N2DH-GOWT1/gt/man_seg01.tif")
+
+results = process_all_methods(image)
+df_scores = evaluate_segmentations(gt_mask, results)
+print(df_scores)
+\end{verbatim}
+
+\subsection*{ Anwendung auf ganze Datensätze}
+
+Ein weiterer Abschnitt des Codes iteriert durch alle Bilder eines Datensatzes. Dabei wird für jedes Bild die Segmentierung berechnet, mit der Ground Truth verglichen und die Dice Scores ausgegeben.
+
+\paragraph{Ablauf:}
+\begin{enumerate}
+  \item Iteration über alle Ordner in \texttt{data/}
+  \item Laden aller Bilder aus \texttt{img/}
+  \item Zuordnung der passenden Ground-Truth-Datei aus \texttt{gt/}
+  \item Aufruf von:
+    \begin{itemize}
+      \item \texttt{load\_image\_and\_gt}
+      \item \texttt{process\_all\_methods}
+      \item \texttt{evaluate\_segmentations}
+    \end{itemize}
+  \item Ausgabe der Dice Scores pro Bild und Methode
+\end{enumerate}
+
+Dieser automatisierte Ablauf dient zur vergleichenden Evaluation über ganze Datensätze hinweg.
+
+\subsection*{ Fehlerbehandlung}
+\begin{itemize}
+  \item Bilder ohne passende Ground Truth werden übersprungen
+  \item Fehler beim Laden oder Verarbeiten eines Bildes werden abgefangen und ausgegeben
+\end{itemize}
+
+\subsection*{ Nutzen}
+
+Dieses Skript ist essenziell für die \textbf{quantitative Bewertung} der Segmentierungsmethoden. Es zeigt zuverlässig, welche Methode in welchem Datensatz die besten Ergebnisse liefert.
+
+\section*{ Dokumentation: \texttt{run\_batch\_evaluation.py}}
+
+Dieses Skript automatisiert die Auswertung von Segmentierungsmethoden durch Vergleich der segmentierten Masken mit Ground-Truth-Daten. Es verwendet den Dice-Koeffizienten zur Bewertung der Genauigkeit.
+
+\section*{ Funktionen in \texttt{run\_batch\_evaluation.py}}
+
+\subsection*{Funktion: \texttt{run\_batch\_evaluation(img\_dir, gt\_dir, dataset=None)}}
+
+\begin{itemize}
+  \item \textbf{Zweck:} Führt Segmentierung und Bewertung für alle Bilder eines Datensatzes durch.
+  \item \textbf{Argumente:}
+    \begin{itemize}
+      \item \texttt{img\_dir}: Pfad zum Ordner mit Input-Bildern.
+      \item \texttt{gt\_dir}: Pfad zum Ordner mit Ground-Truth-Masken.
+      \item \texttt{dataset} (optional): Name des Datensatzes (für Logging/Export).
+    \end{itemize}
+  \item \textbf{Rückgabe:} \texttt{pandas.DataFrame} mit Spalten: \texttt{Bild}, \texttt{Methode}, \texttt{Dice Score}, \texttt{Datensatz} (optional).
+\end{itemize}
+
+\subsubsection*{Ablauf:}
+
+\begin{enumerate}
+  \item \textbf{Dateinamen sammeln:} Bilddateien (\texttt{.tif}, \texttt{.png}) und GT-Dateien werden gesammelt.
+  \item \textbf{Matching:} Die passende GT-Datei wird anhand des Bildnamens abgeleitet.
+  \item \textbf{Laden \& Segmentieren:} Für jedes Paar:
+    \begin{itemize}
+      \item Bild und GT laden (\texttt{load\_image\_and\_gt})
+      \item Alle Methoden auf das Bild anwenden (\texttt{process\_all\_methods})
+      \item Dice Score für jede Methode berechnen (\texttt{evaluate\_segmentations})
+    \end{itemize}
+  \item \textbf{Daten sammeln:} Ergebnisse werden gesammelt und in einem DataFrame zurückgegeben.
+\end{enumerate}
+
+\subsection*{ Anwendungsskript: Einzelordner}
+
+\begin{verbatim}
+from run_batch_evaluation import run_batch_evaluation
+import os
+
+if __name__ == "__main__":
+    img_dir = "data/N2DH-GOWT1/img"
+    gt_dir  = "data/N2DH-GOWT1/gt"
+
+    df = run_batch_evaluation(img_dir, gt_dir)
+    os.makedirs("results", exist_ok=True)
+    df.to_csv("results/dice_scores.csv", index=False)
+    print(df)
+\end{verbatim}
+
+\subsection*{ Anwendungsskript: Alle Datensätze}
+
+\begin{verbatim}
+from run_batch_evaluation import run_batch_evaluation
+import os
+import pandas as pd
+
+if __name__ == "__main__":
+    base_data_dir = "data"
+    all_dfs = []
+
+    for dataset_name in os.listdir(base_data_dir):
+        dataset_path = os.path.join(base_data_dir, dataset_name)
+        img_dir = os.path.join(dataset_path, "img")
+        gt_dir  = os.path.join(dataset_path, "gt")
+
+        if not (os.path.isdir(img_dir) and os.path.isdir(gt_dir)):
+            print(f"  Überspringe {dataset_name}, 'img/' oder 'gt/' fehlt.")
+            continue
+
+        print(f" Verarbeite Datensatz: {dataset_name}")
+        try:
+            df = run_batch_evaluation(img_dir, gt_dir, dataset=dataset_name)
+            all_dfs.append(df)
+        except Exception as e:
+            print(f"    Fehler bei {dataset_name}: {e}")
+
+    if all_dfs:
+        df_all = pd.concat(all_dfs, ignore_index=True)
+        os.makedirs("results", exist_ok=True)
+        df_all.to_csv("results/dice_scores.csv", index=False)
+        print(f" Ergebnisse gespeichert: results/dice_scores.csv")
+    else:
+        print(" Keine Ergebnisse gesammelt.")
+\end{verbatim}
+
+\subsection*{ Hinweise}
+
+\begin{itemize}
+  \item Es wird das Modul \texttt{tqdm} für Fortschrittsanzeigen verwendet.
+  \item Ergebnisse werden in \texttt{results/dice\_scores.csv} gespeichert.
+  \item Dieses Skript eignet sich sowohl für Einzel- als auch Mehrfachdatensätze.
+\end{itemize}
+
+\section*{ Visualisierung \& Analyse}
+
+\subsection*{ Visualisierung von Segmentierungen (\texttt{visualize\_segmentations.py})}
+
+Dieses Modul dient der Darstellung und Abspeicherung von Segmentierungsergebnissen aus dem Projekt zur Zellkern-Segmentierung. Es ermöglicht die vergleichende Visualisierung zwischen dem Originalbild, der Ground Truth und den Resultaten verschiedener Segmentierungsmethoden.
+
+\subsection*{ Funktion: \texttt{visualize\_segmentations(...)}}
+
+\begin{verbatim}
+def visualize_segmentations(
+    image: np.ndarray,
+    gt_mask: np.ndarray,
+    predictions: Dict[str, np.ndarray],
+    max_cols: int = 3,
+    save_path: str = None
+)
+\end{verbatim}
+
+\textbf{Parameter:}
+\begin{itemize}
+  \item \texttt{image}: Das Originalbild in Graustufen (float, skaliert auf [0, 1])
+  \item \texttt{gt\_mask}: Die Ground-Truth-Maske als binäres Bild (boolesches Array)
+  \item \texttt{predictions}: Ein Dictionary mit Methodenname $\rightarrow$ Segmentierungsmaske
+  \item \texttt{max\_cols}: Maximale Anzahl an Spalten in der Darstellungsübersicht (Standard: 3)
+  \item \texttt{save\_path}: Optionaler Dateipfad zur Abspeicherung der Visualisierung
+\end{itemize}
+
+\textbf{Ablauf:}
+\begin{enumerate}
+  \item Erstellung einer kombinierten Liste mit Titeln und zugehörigen Bildern: \texttt{"Original"}, \texttt{"Ground Truth"} und allen Einträgen aus \texttt{predictions}.
+  \item Berechnung der benötigten Zeilen und Spalten.
+  \item Für jede Bild-Maske-Kombination wird ein \texttt{subplot} erzeugt:
+  \begin{itemize}
+    \item Bildanzeige, Titel setzen, Achsen entfernen.
+  \end{itemize}
+  \item Nicht benutzte Subplots werden deaktiviert.
+  \item Optional: Abspeichern des Gesamtergebnisses als PNG-Datei.
+\end{enumerate}
+
+\subsection*{ Beispielverwendung (Einzelbild)}
+
+\begin{verbatim}
+from src.load_image_pair import load_image_and_gt
+from process_image import process_all_methods
+from visualize_segmentation import visualize_segmentations
+
+image, gt_mask = load_image_and_gt(
+    "data/N2DH-GOWT1/img/t01.tif",
+    "data/N2DH-GOWT1/gt/man_seg01.tif"
+)
+
+results = process_all_methods(image)
+
+visualize_segmentations(image, gt_mask, results)
+\end{verbatim}
+
+\subsection*{ Batch-Visualisierung aller Bilder}
+
+Ein erweiterter Codeabschnitt visualisiert und speichert automatisch die Segmentierungen aller Bilder eines Datensatzes.
+
+\textbf{Wichtige Punkte:}
+\begin{itemize}
+  \item Alle \texttt{.tif} und \texttt{.png} Bilder aus dem Verzeichnis \texttt{img/} werden geladen.
+  \item Ground-Truth-Dateien werden automatisch anhand des Bildnamens zugeordnet.
+  \item Für jedes Bild und jede Methode wird eine Visualisierung mit Originalbild, GT und Segmentierung erzeugt.
+  \item Die Ergebnisse werden in \texttt{output\_visuals/} gespeichert.
+\end{itemize}
+
+\textbf{Codeausschnitt:}
+\begin{verbatim}
+for method_name, mask in predictions.items():
+    fig, axes = plt.subplots(1, 3, figsize=(12, 4))
+    axes[0].imshow(image, cmap="gray")
+    axes[0].set_title("Originalbild")
+    axes[1].imshow(gt_mask, cmap="gray")
+    axes[1].set_title("Ground Truth")
+    axes[2].imshow(mask, cmap="gray")
+    axes[2].set_title(f"Segmentierung: {method_name}")
+    ...
+    plt.savefig(out_path)
+\end{verbatim}
+
+\subsection*{ Ergebnis}
+
+Die gespeicherten Bilder befinden sich im Verzeichnis \texttt{output\_visuals/\{Datensatz\}/\{Methode\}/}. Jede PNG-Datei enthält eine vergleichende Darstellung zwischen Originalbild, Ground Truth und segmentiertem Bild.
+
+\subsection*{ Fehlerbehandlung}
+
+Falls Ground-Truth-Dateien fehlen oder ein Bild fehlerhaft ist, wird dies mit einer Warnmeldung im Terminal angezeigt. Die Verarbeitung wird dennoch fortgesetzt.
+
+
+\section{Visualisierung und Analyse der Segmentierungsmethoden}
+
+\subsection{Visualisierung von Segmentierungen (\texttt{visualize\_segmentations.py})}
+
+Dieses Modul dient der Darstellung und Abspeicherung von Segmentierungsergebnissen aus dem Projekt zur Zellkern-Segmentierung. Es ermöglicht die vergleichende Visualisierung zwischen dem Originalbild, der Ground Truth und den Resultaten verschiedener Segmentierungsmethoden.
+
+\subsubsection*{Funktion \texttt{visualize\_segmentations(...)}} 
+
+\begin{verbatim}
+def visualize_segmentations(
+    image: np.ndarray,
+    gt_mask: np.ndarray,
+    predictions: Dict[str, np.ndarray],
+    max_cols: int = 3,
+    save_path: str = None
+)
+\end{verbatim}
+
+\paragraph{Parameter:}
+\begin{itemize}
+    \item \texttt{image}: Originalbild in Graustufen, skaliert auf [0, 1].
+    \item \texttt{gt\_mask}: Ground-Truth-Maske als binäres Array.
+    \item \texttt{predictions}: Dictionary mit Methodenname \textrightarrow{} Segmentierungsmaske.
+    \item \texttt{max\_cols}: Maximale Spaltenanzahl für die Darstellung.
+    \item \texttt{save\_path}: Optionaler Pfad zur Speicherung der Visualisierung.
+\end{itemize}
+
+\paragraph{Ablauf:}
+\begin{enumerate}
+    \item Erstellung einer kombinierten Liste aus Originalbild, Ground Truth und den Segmentierungen.
+    \item Berechnung der nötigen Zeilen- und Spaltenanzahl.
+    \item Darstellung mittels Subplots und Titelbeschriftung.
+    \item Speicherung (optional) im PNG-Format.
+\end{enumerate}
+
+\paragraph{Beispielverwendung (Einzelbild):}
+
+\begin{verbatim}
+from src.load_image_pair import load_image_and_gt
+from process_image import process_all_methods
+from visualize_segmentation import visualize_segmentations
+
+image, gt_mask = load_image_and_gt(
+    "data/N2DH-GOWT1/img/t01.tif",
+    "data/N2DH-GOWT1/gt/man_seg01.tif"
+)
+
+results = process_all_methods(image)
+visualize_segmentations(image, gt_mask, results)
+\end{verbatim}
+
+\subsubsection*{Batch-Visualisierung}
+\begin{itemize}
+    \item Lädt alle .tif/.png Bilder in \texttt{img/}.
+    \item Erzeugt Visualisierungen für jede Methode.
+    \item Ergebnisse werden in \texttt{output\_visuals/} gespeichert.
+\end{itemize}
+
+\paragraph{Ergebnis:} PNG-Dateien mit direktem Vergleich zwischen Original, Ground Truth und Segmentierung.
+
+\paragraph{Fehlerbehandlung:} Fehlende GT-Dateien oder fehlerhafte Bilder werden erkannt und übersprungen.
+
+\vspace{1em}
+\subsection{Vergleich der Otsu-Methoden (Scatterplots)}
+
+\subsubsection*{Vergleich Otsu Local -- \texttt{plot\_otsu\_local\_comparison.py}}
+
+\begin{itemize}
+    \item Lädt \texttt{results/dice\_scores.csv}.
+    \item Filtert auf ``Otsu Local (custom)'' und ``Otsu Local (skimage)''.
+    \item Erstellt Scatterplot: jeder Punkt ein Bild, Achsen = Dice Score pro Methode.
+    \item Speichert Plot als \texttt{results/otsu\_local\_scatterplot.png}.
+\end{itemize}
+
+\subsubsection*{Vergleich Otsu Global -- \texttt{plot\_otsu\_global\_comparison.py}}
+
+\begin{itemize}
+    \item Gleiches Vorgehen wie oben, aber für ``Otsu Global (custom)'' vs. ``Otsu Global (skimage)''.
+    \item Plot zeigt relative Genauigkeit beider globaler Verfahren.
+\end{itemize}
+
+\vspace{1em}
+\subsection{Auswertung aller Methoden: \texttt{plot\_all\_methods.py}}
+
+\begin{itemize}
+    \item Erzeugt zwei zentrale Visualisierungen:
+    \begin{itemize}
+        \item \textbf{Boxplot:} Dice Score je Methode – Verteilung, Ausreißer, Median.
+        \item \textbf{Heatmap:} Dice Score für jede Kombination aus Bild und Methode.
+    \end{itemize}
+    \item Beide Plots werden im Ordner \texttt{results/} gespeichert.
+\end{itemize}
+
+\paragraph{Hinweis:} Stelle sicher, dass die Datei \texttt{results/dice\_scores.csv} vorliegt. Sie wird z.B. durch \texttt{run\_batch\_evaluation.py} erzeugt.
+
+\vspace{1em}
+\subsection{Zusammenfassung}
+
+\begin{itemize}
+    \item Scatterplots ermöglichen direkte Methode-zu-Methode-Vergleiche.
+    \item Boxplots geben Überblick über die Stabilität und Verteilung der Genauigkeit.
+    \item Heatmaps identifizieren Methoden, die bei bestimmten Bildern besonders gut/schlecht abschneiden.
+\end{itemize}
+
+
+\end{document}
+
