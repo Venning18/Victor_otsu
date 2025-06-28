@@ -1,0 +1,141 @@
+Bild,Methode,Dice Score,Datensatz
+t01.tif,Otsu Global (custom),0.5705017182130584,N2DH-GOWT1
+t01.tif,Otsu Global (skimage),0.5705017182130584,N2DH-GOWT1
+t01.tif,Multi-Otsu (skimage),0.5705017182130584,N2DH-GOWT1
+t01.tif,Otsu Local (custom),0.19026075584734606,N2DH-GOWT1
+t01.tif,Otsu Local (skimage),0.1814163952845343,N2DH-GOWT1
+t21.tif,Otsu Global (custom),0.5737820758716763,N2DH-GOWT1
+t21.tif,Otsu Global (skimage),0.5737820758716763,N2DH-GOWT1
+t21.tif,Multi-Otsu (skimage),0.5737820758716763,N2DH-GOWT1
+t21.tif,Otsu Local (skimage),0.16783022813201445,N2DH-GOWT1
+t21.tif,Otsu Local (custom),0.14473489389546684,N2DH-GOWT1
+t31.tif,Otsu Global (custom),0.568002229254991,N2DH-GOWT1
+t31.tif,Otsu Global (skimage),0.568002229254991,N2DH-GOWT1
+t31.tif,Multi-Otsu (skimage),0.568002229254991,N2DH-GOWT1
+t31.tif,Otsu Local (skimage),0.1623726550040534,N2DH-GOWT1
+t31.tif,Otsu Local (custom),0.14756705950401272,N2DH-GOWT1
+t39.tif,Otsu Global (custom),0.5830196570472606,N2DH-GOWT1
+t39.tif,Otsu Global (skimage),0.5830196570472606,N2DH-GOWT1
+t39.tif,Multi-Otsu (skimage),0.5830196570472606,N2DH-GOWT1
+t39.tif,Otsu Local (skimage),0.17077352051940894,N2DH-GOWT1
+t39.tif,Otsu Local (custom),0.15271453260311646,N2DH-GOWT1
+t52.tif,Otsu Global (custom),0.6502180828858916,N2DH-GOWT1
+t52.tif,Otsu Global (skimage),0.6502180828858916,N2DH-GOWT1
+t52.tif,Multi-Otsu (skimage),0.5698524616576773,N2DH-GOWT1
+t52.tif,Otsu Local (skimage),0.21674457205461647,N2DH-GOWT1
+t52.tif,Otsu Local (custom),0.2085091303721914,N2DH-GOWT1
+t72.tif,Otsu Global (custom),0.588161094224924,N2DH-GOWT1
+t72.tif,Otsu Global (skimage),0.588161094224924,N2DH-GOWT1
+t72.tif,Multi-Otsu (skimage),0.588161094224924,N2DH-GOWT1
+t72.tif,Otsu Local (skimage),0.24709554533940983,N2DH-GOWT1
+t72.tif,Otsu Local (custom),0.21156004332287576,N2DH-GOWT1
+t13.tif,Otsu Global (skimage),0.6855886556007476,N2DL-HeLa
+t13.tif,Multi-Otsu (skimage),0.6851990323290081,N2DL-HeLa
+t13.tif,Otsu Local (skimage),0.13017894650137968,N2DL-HeLa
+t13.tif,Otsu Global (custom),0.07436694813419911,N2DL-HeLa
+t13.tif,Otsu Local (custom),0.05560862594546364,N2DL-HeLa
+t52.tif,Otsu Global (skimage),0.6478693311433525,N2DL-HeLa
+t52.tif,Multi-Otsu (skimage),0.6478693311433525,N2DL-HeLa
+t52.tif,Otsu Local (skimage),0.22700899995431495,N2DL-HeLa
+t52.tif,Otsu Global (custom),0.12357364181457739,N2DL-HeLa
+t52.tif,Otsu Local (custom),0.08665415466886055,N2DL-HeLa
+t75.tif,Otsu Global (skimage),0.768458046124376,N2DL-HeLa
+t75.tif,Multi-Otsu (skimage),0.768458046124376,N2DL-HeLa
+t75.tif,Otsu Local (skimage),0.7443762253082236,N2DL-HeLa
+t75.tif,Otsu Global (custom),0.4032134810257176,N2DL-HeLa
+t75.tif,Otsu Local (custom),0.33010935551628284,N2DL-HeLa
+t79.tif,Otsu Global (skimage),0.7660179019659928,N2DL-HeLa
+t79.tif,Multi-Otsu (skimage),0.7660179019659928,N2DL-HeLa
+t79.tif,Otsu Local (skimage),0.751064540726715,N2DL-HeLa
+t79.tif,Otsu Global (custom),0.4112803223656655,N2DL-HeLa
+t79.tif,Otsu Local (custom),0.33288268754942224,N2DL-HeLa
+dna-0.png,Otsu Global (custom),0.8943783223933183,NIH3T3
+dna-0.png,Otsu Global (skimage),0.8943783223933183,NIH3T3
+dna-0.png,Multi-Otsu (skimage),0.8943783223933183,NIH3T3
+dna-0.png,Otsu Local (skimage),0.25940153659522847,NIH3T3
+dna-0.png,Otsu Local (custom),0.200653380273286,NIH3T3
+dna-1.png,Otsu Global (custom),0.8845252721173281,NIH3T3
+dna-1.png,Otsu Global (skimage),0.8845252721173281,NIH3T3
+dna-1.png,Multi-Otsu (skimage),0.8845252721173281,NIH3T3
+dna-1.png,Otsu Local (skimage),0.2775642726124643,NIH3T3
+dna-1.png,Otsu Local (custom),0.2231327766225968,NIH3T3
+dna-26.png,Otsu Global (custom),0.8133777288472382,NIH3T3
+dna-26.png,Otsu Global (skimage),0.8133777288472382,NIH3T3
+dna-26.png,Multi-Otsu (skimage),0.8133777288472382,NIH3T3
+dna-26.png,Otsu Local (skimage),0.35999688744103486,NIH3T3
+dna-26.png,Otsu Local (custom),0.29713913767313194,NIH3T3
+dna-27.png,Otsu Global (custom),0.7026585714883163,NIH3T3
+dna-27.png,Otsu Global (skimage),0.7026585714883163,NIH3T3
+dna-27.png,Multi-Otsu (skimage),0.7026585714883163,NIH3T3
+dna-27.png,Otsu Local (skimage),0.3589093119293738,NIH3T3
+dna-27.png,Otsu Local (custom),0.2850980797070147,NIH3T3
+dna-28.png,Otsu Global (skimage),0.7528567225654604,NIH3T3
+dna-28.png,Multi-Otsu (skimage),0.7528567225654604,NIH3T3
+dna-28.png,Otsu Local (skimage),0.32329062085836063,NIH3T3
+dna-28.png,Otsu Global (custom),0.3158152367118249,NIH3T3
+dna-28.png,Otsu Local (custom),0.25097305935164743,NIH3T3
+dna-29.png,Otsu Global (skimage),0.647632667167185,NIH3T3
+dna-29.png,Multi-Otsu (skimage),0.647632667167185,NIH3T3
+dna-29.png,Otsu Local (skimage),0.2878042649067925,NIH3T3
+dna-29.png,Otsu Global (custom),0.28370685279662594,NIH3T3
+dna-29.png,Otsu Local (custom),0.2250251279239766,NIH3T3
+dna-30.png,Otsu Global (custom),0.6095864948254034,NIH3T3
+dna-30.png,Otsu Global (skimage),0.6095864948254034,NIH3T3
+dna-30.png,Multi-Otsu (skimage),0.6095864948254034,NIH3T3
+dna-30.png,Otsu Local (skimage),0.3804763560500695,NIH3T3
+dna-30.png,Otsu Local (custom),0.3147382138750479,NIH3T3
+dna-31.png,Otsu Global (custom),0.7237186625334818,NIH3T3
+dna-31.png,Otsu Global (skimage),0.7237186625334818,NIH3T3
+dna-31.png,Multi-Otsu (skimage),0.7237186625334818,NIH3T3
+dna-31.png,Otsu Local (skimage),0.4155684648946865,NIH3T3
+dna-31.png,Otsu Local (custom),0.3410950529430465,NIH3T3
+dna-32.png,Otsu Local (skimage),0.3401888477987449,NIH3T3
+dna-32.png,Otsu Local (custom),0.28068363287471126,NIH3T3
+dna-32.png,Otsu Global (custom),0.028995403964229303,NIH3T3
+dna-32.png,Otsu Global (skimage),0.028995403964229303,NIH3T3
+dna-32.png,Multi-Otsu (skimage),0.028995403964229303,NIH3T3
+dna-33.png,Multi-Otsu (skimage),0.4475924944774015,NIH3T3
+dna-33.png,Otsu Global (custom),0.42998864378556173,NIH3T3
+dna-33.png,Otsu Global (skimage),0.42998864378556173,NIH3T3
+dna-33.png,Otsu Local (skimage),0.3070192770356182,NIH3T3
+dna-33.png,Otsu Local (custom),0.24441380627254056,NIH3T3
+dna-37.png,Otsu Local (skimage),0.3352927450910005,NIH3T3
+dna-37.png,Otsu Global (custom),0.311728665771575,NIH3T3
+dna-37.png,Otsu Local (custom),0.27267239846615465,NIH3T3
+dna-37.png,Otsu Global (skimage),0.0,NIH3T3
+dna-37.png,Multi-Otsu (skimage),0.0,NIH3T3
+dna-40.png,Otsu Global (custom),0.680536637820677,NIH3T3
+dna-40.png,Otsu Global (skimage),0.680536637820677,NIH3T3
+dna-40.png,Multi-Otsu (skimage),0.680536637820677,NIH3T3
+dna-40.png,Otsu Local (skimage),0.32039425718939907,NIH3T3
+dna-40.png,Otsu Local (custom),0.25834502288807487,NIH3T3
+dna-42.png,Otsu Local (skimage),0.2891710663132738,NIH3T3
+dna-42.png,Otsu Local (custom),0.22746733491765533,NIH3T3
+dna-42.png,Otsu Global (custom),0.00021090001581750118,NIH3T3
+dna-42.png,Otsu Global (skimage),0.00021090001581750118,NIH3T3
+dna-42.png,Multi-Otsu (skimage),0.00021090001581750118,NIH3T3
+dna-44.png,Otsu Global (custom),0.5789127665023891,NIH3T3
+dna-44.png,Otsu Global (skimage),0.5789127665023891,NIH3T3
+dna-44.png,Multi-Otsu (skimage),0.5789127665023891,NIH3T3
+dna-44.png,Otsu Local (skimage),0.42614137307754624,NIH3T3
+dna-44.png,Otsu Local (custom),0.32402209643652763,NIH3T3
+dna-45.png,Otsu Global (custom),0.6286483663940449,NIH3T3
+dna-45.png,Otsu Global (skimage),0.6286483663940449,NIH3T3
+dna-45.png,Multi-Otsu (skimage),0.6286483663940449,NIH3T3
+dna-45.png,Otsu Local (skimage),0.32838812478094803,NIH3T3
+dna-45.png,Otsu Local (custom),0.25804432832456964,NIH3T3
+dna-46.png,Otsu Local (skimage),0.31788585259552204,NIH3T3
+dna-46.png,Otsu Local (custom),0.2524970969212766,NIH3T3
+dna-46.png,Otsu Global (custom),0.07605520913993832,NIH3T3
+dna-46.png,Otsu Global (skimage),0.07605520913993832,NIH3T3
+dna-46.png,Multi-Otsu (skimage),0.07605520913993832,NIH3T3
+dna-47.png,Otsu Local (skimage),0.2787267963602862,NIH3T3
+dna-47.png,Otsu Local (custom),0.22968178119447036,NIH3T3
+dna-47.png,Otsu Global (custom),0.06919951480604966,NIH3T3
+dna-47.png,Otsu Global (skimage),0.06919951480604966,NIH3T3
+dna-47.png,Multi-Otsu (skimage),0.06919951480604966,NIH3T3
+dna-49.png,Otsu Global (custom),0.7965485556767932,NIH3T3
+dna-49.png,Otsu Global (skimage),0.7965485556767932,NIH3T3
+dna-49.png,Multi-Otsu (skimage),0.7965485556767932,NIH3T3
+dna-49.png,Otsu Local (skimage),0.41282227236751257,NIH3T3
+dna-49.png,Otsu Local (custom),0.3168592413361835,NIH3T3

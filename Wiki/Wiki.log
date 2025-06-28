@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.12.15)  28 JUN 2025 13:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.12.15)  28 JUN 2025 13:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -479,19 +479,19 @@ Overfull \hbox (17.07396pt too wide) in paragraph at lines 286--287
 [7]
 
 [8]
-Overfull \hbox (120.4334pt too wide) in paragraph at lines 380--380
+Overfull \hbox (120.4334pt too wide) in paragraph at lines 381--381
 | \T1/cmr/bx/n/14.4 Mod-ulbeschrei-bung: \T1/cmtt/m/n/14.4 process_image.py\T1/cmr/bx/n/14.4 , \T1/cmtt/m/n/14.4 process_image_ein.py\T1/cmr/bx/n/14.4 , \T1/cmtt/m/n/14.4 process_image_all.py| 
  []
 
 
-Overfull \hbox (14.06618pt too wide) in paragraph at lines 391--392
+Overfull \hbox (14.06618pt too wide) in paragraph at lines 392--393
 []\T1/cmr/bx/n/12 Otsu Global (cus-tom)\T1/cmr/m/n/12 : Eigene Im-ple-men-tierung basierend auf Histogramm-Analyse. 
  []
 
 
 
 [9]
-Overfull \hbox (60.91028pt too wide) in paragraph at lines 393--394
+Overfull \hbox (60.91028pt too wide) in paragraph at lines 394--395
 []\T1/cmr/bx/n/12 Otsu Global (skim-age)\T1/cmr/m/n/12 : Standard-Implementierung aus \T1/cmtt/m/n/12 skimage.filters.threshold_otsu\T1/cmr/m/n/12 . 
  []
 
@@ -502,33 +502,33 @@ Overfull \hbox (60.91028pt too wide) in paragraph at lines 393--394
 [11]
 
 [12]
-Overfull \hbox (11.66261pt too wide) in paragraph at lines 543--544
+Overfull \hbox (11.66261pt too wide) in paragraph at lines 544--545
 []\T1/cmr/bx/n/12 Rückgabe: \T1/cmtt/m/n/12 pandas.DataFrame \T1/cmr/m/n/12 mit Spal-ten: \T1/cmtt/m/n/12 Bild\T1/cmr/m/n/12 , \T1/cmtt/m/n/12 Methode\T1/cmr/m/n/12 , \T1/cmtt/m/n/12 Dice Score\T1/cmr/m/n/12 , \T1/cmtt/m/n/12 Datensatz
  []
 
 
 
 [13]
-Overfull \hbox (13.94131pt too wide) in paragraph at lines 610--610
+Overfull \hbox (13.94131pt too wide) in paragraph at lines 611--611
 []            \T1/cmtt/m/n/12 print(f"  Überspringe {dataset_name}, 'img/' oder 'gt/' fehlt.")[] 
  []
 
 
-Overfull \hbox (13.94131pt too wide) in paragraph at lines 610--610
+Overfull \hbox (13.94131pt too wide) in paragraph at lines 611--611
 []            \T1/cmtt/m/n/12 df = run_batch_evaluation(img_dir, gt_dir, dataset=dataset_name)[] 
  []
 
 
 
 [14]
-Overfull \hbox (3.90341pt too wide) in paragraph at lines 649--650
+Overfull \hbox (3.90341pt too wide) in paragraph at lines 650--651
 []\T1/cmr/m/n/12 Erstellung einer kom-binierten Liste mit Titeln und zuge-höri-gen Bildern: \T1/cmtt/m/n/12 "Original"\T1/cmr/m/n/12 ,
  []
 
 
 
 [15]
-Overfull \hbox (44.8518pt too wide) in paragraph at lines 704--705
+Overfull \hbox (44.8518pt too wide) in paragraph at lines 705--706
 \T1/cmr/m/n/12 Die gespe-icherten Bilder befinden sich im Verze-ich-nis \T1/cmtt/m/n/12 output_visuals/{Datensatz}/{Methode}/\T1/cmr/m/n/12 .
  []
 
@@ -539,7 +539,7 @@ Overfull \hbox (44.8518pt too wide) in paragraph at lines 704--705
 [17]
 
 [18]
-Overfull \hbox (8.2093pt too wide) in paragraph at lines 812--813
+Overfull \hbox (8.2093pt too wide) in paragraph at lines 813--814
 []\T1/cmr/m/n/12 Heatmaps iden-ti-fizieren Meth-o-den, die bei bes-timmten Bildern beson-ders gut/schlecht
  []
 
