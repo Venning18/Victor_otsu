@@ -6,23 +6,22 @@
 \contentsline {paragraph}{Ablauf:}{3}{section.4}%
 \contentsline {paragraph}{Erklärung:}{4}{Item.5}%
 \contentsline {paragraph}{Beispielausgabe:}{4}{Item.5}%
-\contentsline {section}{\numberline {5}Modul: \texttt {gray\_hist.py} – Grauwert-Histogrammberechnung}{5}{section.5}%
+\contentsline {section}{\numberline {5}Modul: \texttt {gray\_hist.py} – Grauwert-Histogrammberechnung}{4}{section.5}%
 \contentsline {paragraph}{Zweck}{5}{section.5}%
 \contentsline {paragraph}{Eingaben:}{5}{section.5}%
 \contentsline {paragraph}{Ausgabe:}{5}{section.5}%
 \contentsline {paragraph}{Funktionsweise:}{5}{section.5}%
 \contentsline {paragraph}{Zweck}{5}{Item.9}%
 \contentsline {paragraph}{Eingaben:}{5}{Item.9}%
-\contentsline {paragraph}{Funktionsweise:}{6}{Item.9}%
+\contentsline {paragraph}{Funktionsweise:}{5}{Item.9}%
 \contentsline {section}{\numberline {6}Modul: \texttt {load\_image\_pair.py}}{6}{section.6}%
-\contentsline {paragraph}{Parameter:}{7}{section.6}%
+\contentsline {paragraph}{Parameter:}{6}{section.6}%
 \contentsline {paragraph}{Rückgabe:}{7}{section.6}%
 \contentsline {section}{\numberline {7}Modul: \texttt {otsu\_global.py}}{7}{section.7}%
-\contentsline {section}{\numberline {8}Modul: \texttt {otsu\_global.py}}{7}{section.8}%
-\contentsline {paragraph}{Ablauf:}{8}{section.8}%
-\contentsline {section}{\numberline {9}Modul: \texttt {otsu\_local.py}}{8}{section.9}%
-\contentsline {paragraph}{Parameter:}{9}{section.9}%
-\contentsline {paragraph}{Rückgabewerte:}{9}{section.9}%
+\contentsline {paragraph}{Ablauf:}{8}{section.7}%
+\contentsline {section}{\numberline {8}Modul: \texttt {otsu\_local.py}}{8}{section.8}%
+\contentsline {paragraph}{Parameter:}{9}{section.8}%
+\contentsline {paragraph}{Rückgabewerte:}{9}{section.8}%
 \contentsline {paragraph}{Helferfunktionen:}{10}{Item.23}%
 \contentsline {paragraph}{Ziel:}{10}{Item.23}%
 \contentsline {paragraph}{Beispielausgabe:}{10}{Item.23}%
@@ -32,14 +31,14 @@
 \contentsline {paragraph}{Rückgabe:}{12}{Item.23}%
 \contentsline {paragraph}{Rechenprinzip:}{12}{Item.23}%
 \contentsline {paragraph}{Ablauf:}{12}{Item.23}%
-\contentsline {section}{\numberline {10}Visualisierung und Analyse der Segmentierungsmethoden}{17}{section.10}%
-\contentsline {subsection}{\numberline {10.1}Visualisierung von Segmentierungen (\texttt {visualize\_segmentations.py})}{17}{subsection.10.1}%
-\contentsline {paragraph}{Parameter:}{17}{subsection.10.1}%
-\contentsline {paragraph}{Ablauf:}{17}{subsection.10.1}%
+\contentsline {section}{\numberline {9}Visualisierung und Analyse der Segmentierungsmethoden}{17}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Visualisierung von Segmentierungen (\texttt {visualize\_segmentations.py})}{17}{subsection.9.1}%
+\contentsline {paragraph}{Parameter:}{17}{subsection.9.1}%
+\contentsline {paragraph}{Ablauf:}{17}{subsection.9.1}%
 \contentsline {paragraph}{Beispielverwendung (Einzelbild):}{17}{Item.41}%
 \contentsline {paragraph}{Ergebnis:}{18}{Item.41}%
 \contentsline {paragraph}{Fehlerbehandlung:}{18}{Item.41}%
-\contentsline {subsection}{\numberline {10.2}Vergleich der Otsu-Methoden (Scatterplots)}{18}{subsection.10.2}%
-\contentsline {subsection}{\numberline {10.3}Auswertung aller Methoden: \texttt {plot\_all\_methods.py}}{18}{subsection.10.3}%
-\contentsline {paragraph}{Hinweis:}{18}{subsection.10.3}%
-\contentsline {subsection}{\numberline {10.4}Zusammenfassung}{19}{subsection.10.4}%
+\contentsline {subsection}{\numberline {9.2}Vergleich der Otsu-Methoden (Scatterplots)}{18}{subsection.9.2}%
+\contentsline {subsection}{\numberline {9.3}Auswertung aller Methoden: \texttt {plot\_all\_methods.py}}{18}{subsection.9.3}%
+\contentsline {paragraph}{Hinweis:}{18}{subsection.9.3}%
+\contentsline {subsection}{\numberline {9.4}Zusammenfassung}{19}{subsection.9.4}%

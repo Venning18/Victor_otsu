@@ -50,10 +50,8 @@ Dieses Dokument beschreibt ein Projekt zur Zellkernsegmentierung in Mikroskopieb
 Ziel des Projekts ist es, Zellkerne aus Fluoreszenz-Mikroskopieaufnahmen automatisch zu segmentieren. Es werden Otsu-basierte Schwellenwertmethoden getestet und gegen Ground-Truth-Masken evaluiert.
 
 
-ewpage
-
 \section{Modulübersicht}
-(Der gesamte Abschnitt wird aufgeteilt in Unterabschnitte, z. B. 	exttt{dice\_score.py}, 	exttt{gray\_hist.py} usw.)
+(Der gesamte Abschnitt wird aufgeteilt in Unterabschnitte, z. B. 	{dice\_score.py}, 	{gray\_hist.py} usw.)
 
 \section{Modul: \texttt{dice\_score.py} - Berechnung des Dice-Koeffizienten}
 
@@ -270,7 +268,8 @@ Die Ground-Truth-Maske wird ebenfalls als Grauwertbild geladen. Durch den Vergle
 \subsection*{Beispiel}
 
 \begin{verbatim}
-image, gt = load_image_and_gt("data/N2DH-GOWT1/img/t01.tif", "data/N2DH-GOWT1/gt/man_seg01.tif")
+image, gt = load_image_and_gt("data/N2DH-GOWT1/img/t01.tif", 
+"data/N2DH-GOWT1/gt/man_seg01.tif")
 \end{verbatim}
 
 Lädt das Bild \texttt{t01.tif} und die zugehörige Ground-Truth-Maske \texttt{man\_seg01.tif} aus dem Dataset \texttt{N2DH-GOWT1}.
@@ -286,7 +285,6 @@ Lädt das Bild \texttt{t01.tif} und die zugehörige Ground-Truth-Maske \texttt{m
 
 Dieses Modul enthält die eigene Implementierung des globalen Otsu-Verfahrens zur Schwellenwertbestimmung und Segmentierung von Grauwertbildern.
 
-\section{Modul: \texttt{otsu\_global.py}}
 
 \subsection*{Funktionen}
 

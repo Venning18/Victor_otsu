@@ -1,6 +1,6 @@
-PWD c:\Users\victo\SynologyDrive\Studium\molekulare Biotechnologie\Heidelberg\Bioinformatik\Projekt\Otsu Treshhold\Victor
+PWD c:\Users\victo\SynologyDrive\Studium\molekulare Biotechnologie\Heidelberg\Bioinformatik\Projekt\Otsu Treshhold\Victor_otsu\Wiki
 INPUT C:\Users\victo\AppData\Local\MiKTeX\miktex\data\le\pdftex\pdflatex.fmt
-INPUT c:\Users\victo\SynologyDrive\Studium\molekulare Biotechnologie\Heidelberg\Bioinformatik\Projekt\Otsu Treshhold\Victor\Wiki.tex
+INPUT c:\Users\victo\SynologyDrive\Studium\molekulare Biotechnologie\Heidelberg\Bioinformatik\Projekt\Otsu Treshhold\Victor_otsu\Wiki\Wiki.tex
 OUTPUT Wiki.log
 INPUT C:\Users\victo\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Users\victo\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
