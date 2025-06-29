@@ -1,6 +1,5 @@
-# install_requirements.py
-
 import subprocess
+import sys
 
 packages = [
     "numpy",
@@ -13,4 +12,4 @@ packages = [
 
 for pkg in packages:
     print(f"📦 Installing {pkg} ...")
-    subprocess.check_call(["pip", "install", pkg])
+    subprocess.check_call([sys.executable, "-m", "pip", "install", pkg])
