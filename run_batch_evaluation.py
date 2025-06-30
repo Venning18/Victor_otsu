@@ -5,7 +5,7 @@ from tqdm import tqdm
 
 from src.load_image_pair import load_image_and_gt
 from process_image import process_all_methods
-from evaluate_segmentation import evaluate_segmentations
+from method.evaluate_segmentation.evaluate_segmentation import evaluate_segmentations
 
 
 def run_batch_evaluation(img_dir, gt_dir, dataset=None):
