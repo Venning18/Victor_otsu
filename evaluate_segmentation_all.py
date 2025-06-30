@@ -2,7 +2,7 @@ import os
 from glob import glob
 from src.load_image_pair import load_image_and_gt
 from process_image import process_all_methods
-from method.evaluate_segmentation.evaluate_segmentation import evaluate_segmentations
+from evaluate_segmentation import evaluate_segmentations
 
 # Basisverzeichnis für alle Datensätze
 base_data_dir = "data"

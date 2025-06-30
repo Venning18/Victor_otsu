@@ -1,8 +1,8 @@
 from src.load_image_pair import load_image_and_gt
 from process_image import process_all_methods
 
-img_path = "data/N2DH-GOWT1/img/t01.tif"
-gt_path  = "data/N2DH-GOWT1/gt/man_seg01.tif"
+img_path = "data/N2DL-HeLa/img/t13.tif"
+gt_path  = "data/N2DL-HeLa/gt/man_seg13.tif"
 
 image, gt = load_image_and_gt(img_path, gt_path)
 
