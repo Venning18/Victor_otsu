@@ -23,7 +23,11 @@ plt.savefig("results/dice_scores_boxplot.png", dpi=150)
 plt.show()
 
 # 🔹 HEATMAP: Dice Scores pro Bild & Methode
-df_pivot = df.pivot(index="Bild", columns="Methode", values="Dice Score")
+df_pivot = df.pivot_table(index="Bild", columns="Methode", values="Dice Score", aggfunc="mean")
+
+dups = df[df.duplicated(subset=["Bild", "Methode"], keep=False)]
+print("🚨 Doppelte Kombinationen von Bild & Methode:")
+print(dups)
 
 plt.figure(figsize=(12, 8))
 sns.heatmap(df_pivot, annot=True, fmt=".2f", cmap="viridis", linewidths=0.5)
